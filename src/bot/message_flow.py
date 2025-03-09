@@ -6,6 +6,8 @@ import re
 intents = Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
+MEMORY = 10
+message_history = []
 
 @bot.event
 async def on_ready():
@@ -31,9 +33,17 @@ async def echo(ctx, *, content: str):
     await ctx.send(content)
 
 @bot.command(name='chat')
-async def chat(ctx, *, prompt: str):
-    response = get_response(prompt)
-    await ctx.send(response)
+async def chat(ctx, *, prompt: str = None):
+    if prompt is None:
+        await ctx.send("Não escreveste nada seu energúmeno de merda")
+    else:
+        message_history.append(prompt)
+
+        if len(message_history) > MEMORY:
+            message_history.pop(0)
+
+        response = get_response(prompt, message_history)
+        await ctx.send(response)
 
 def run(token: str):
     bot.run(token)
