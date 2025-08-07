@@ -1,5 +1,12 @@
+.ONESHELL:
+SHELL := /bin/bash
 venv:
-	python3.10 -m venv venv
-	./venv/bin/pip install -r requirements.txt
+	uv venv .venv --python 3.10
+	source .venv/bin/activate && \
+	uv sync --active --extra dev && \
+	uv pip install --upgrade pip setuptools wheel toml && \
+	uv pip install -e . --no-cache-dir && \
+	uv lock
+
 run:
 	python src/main.py
