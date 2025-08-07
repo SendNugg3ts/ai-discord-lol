@@ -7,7 +7,7 @@ intents = Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 MEMORY = 10
-message_history = []
+message_history = []  # Stores dicts: {"role": "user"|"assistant", "content": str}
 
 @bot.event
 async def on_ready():
@@ -37,13 +37,14 @@ async def chat(ctx, *, prompt: str = None):
     if prompt is None:
         await ctx.send("Não escreveste nada seu energúmeno de merda")
     else:
-        message_history.append(prompt)
+        message_history.append({"role": "user", "content": prompt})
 
-        if len(message_history) > MEMORY:
+        if len(message_history) > MEMORY * 2:
             message_history.pop(0)
 
-        response = get_response(prompt, message_history)
-        await ctx.send(response)
+    response = get_response(message_history)
+    await ctx.send(response)
+    message_history.append({"role": "assistant", "content": response})
 
 def run(token: str):
     bot.run(token)

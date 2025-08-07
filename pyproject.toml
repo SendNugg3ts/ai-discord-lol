@@ -2,11 +2,13 @@
 name = "ai-discord-lol"
 version = "0.1.0"
 description = "A Discord bot"
-requires-python = "==3.10.*"
+requires-python = "==3.12.*"
 authors = [{ name = "lfsilva", email = "luis.fmsilva@hotmail.com" }]
 dependencies = [
-    "python-dotenv==0.21.0",
-    "discord.py==2.3.2"
+    "discord.py==2.3.2",
+    "groq==0.31.0",
+    "Jinja2==3.1.6",
+    "python-dotenv==0.21.0"
 ]
 
 [project.optional-dependencies]

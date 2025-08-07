@@ -7,7 +7,7 @@ env = Environment(loader=FileSystemLoader(os.path.join(os.path.dirname(__file__)
 template = env.get_template('system_message.jinja2')
 system_message = template.render()
 
-def get_response(prompt: str, previous_messages: list) -> str:
+def get_response(message_history: list) -> str:
     client = Groq(api_key=get_settings().GROQ_API_KEY)
 
     messages = [
@@ -16,14 +16,11 @@ def get_response(prompt: str, previous_messages: list) -> str:
             "content": system_message
         }
     ]
-    for msg in previous_messages:
-        messages.append({"role": "user", "content": msg})
-
-    messages.append({"role": "user", "content": prompt})
+    messages.extend(message_history)
 
     chat_completion = client.chat.completions.create(
         messages=messages,
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-20b",
     )
 
     return chat_completion.choices[0].message.content
