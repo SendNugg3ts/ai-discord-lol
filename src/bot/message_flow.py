@@ -7,7 +7,7 @@ intents = Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 MEMORY = 10
-message_history = []  # Stores dicts: {"role": "user"|"assistant", "content": str}
+message_history = []
 
 @bot.event
 async def on_ready():
